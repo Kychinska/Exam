@@ -23,7 +23,6 @@ namespace P1
 
     public class Address
     {
-        [Required]
         public string Street { get; set; }
         public int CityId { get; set; }
     }
@@ -38,6 +37,7 @@ namespace P1
             modelBuilder.Entity<Person>().HasKey(x => x.Id);
             modelBuilder.Entity<Person>().Property(x => x.Name).HasMaxLength(128);
             modelBuilder.Entity<City>().HasKey(x => x.Id);
+            modelBuilder.Entity<Person>().Property(x => x.Address.Street).IsRequired();
         }
 
     }
