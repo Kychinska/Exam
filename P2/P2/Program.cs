@@ -14,18 +14,13 @@ namespace P2
             {
                 Console.WriteLine("Write:");
                 int threads = Convert.ToInt32(Console.ReadLine());
-                var scheduler = new BoundedThreadNumberTaskScheduler(threads);
+                ThreadPool.SetMaxThreads(threads, threads);
                 var tasks = new List<Task>();
-
-                var factory = new TaskFactory(scheduler);
-
                 var watch = Stopwatch.StartNew();
-
-                for (int i = 0; i < 100; i++)
+                Parallel.For(0, 100, new ParallelOptions() { MaxDegreeOfParallelism = threads }, d =>
                 {
-                    tasks.Add(factory.StartNew(() => Find10000PrimeNumbers()));
-                }
-
+                    Find10000PrimeNumbers();
+                });
                 Task.WaitAll(tasks.ToArray());
                 watch.Stop();
                 Console.WriteLine("Time: " + watch.ElapsedMilliseconds + "ms");
